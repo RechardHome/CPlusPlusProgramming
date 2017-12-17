@@ -1,10 +1,12 @@
 #include <thread>
 #include <iostream>
 #include <vector>
+#include <mutex>
 
 using namespace std;
-
+static mutex m;
 void f(const vector<double>* v, double* res) {
+    unique_lock<mutex> lock {m};
     if (NULL != v) {
         for (auto p = v->begin(); p != v->end(); ++p) {
             cout << *p << endl;
@@ -23,6 +25,7 @@ public:
     }
 
     void operator()() {
+        unique_lock<mutex> lock {m};
         for (auto p = v.begin(); p != v.end(); ++p) {
             cout << *p << endl;
         } 
